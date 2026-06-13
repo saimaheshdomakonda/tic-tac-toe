@@ -51,27 +51,50 @@ if (winner){
     </>
   );
 }
-export default function Game(){
+
+export default function Game() {
     const [xiIsNext, setXIsNext] = useState(true);
     const [history, setHistory] = useState([Array(9).fill(null)]);
-    const currentSquares= history[history.length-1];
+    const currentSquares= history[history.length-1]; 
+
     function handlePlay(nextSquares) {
         setHistory([...history, nextSquares]);
         setXIsNext(!xiIsNext);
     }
+    function jumpTo(nextMove){
+     }
+     const moves = history.map((squares, move) =>{
+        let description;
+        if (move > 0) {
+            description = "go to move #" + move;
+
+        } else {
+            description = "go to game start";
+
+        }
+
+     return (
+        <li>
+            <button onClick={() => jumpTo(move)}>{description}</button>
+        </li>
+     );
+
+    });
+      
+
     return (
         <div className="game">
             <div className="game-board">
                 <Board xiIsNext={xiIsNext} squares={currentSquares} onPlay={handlePlay} />
             </div>
             <div className="game-info">
-                <ol>{/*TODO*/}</ol>
+                <ol>{moves}</ol>
             </div>
         </div>
-    )
+    );
 }
 
-function calculateWinner(square){
+function calculateWinner(squares){
     const lines= [
         [0,1,2],
         [3,4,5],
@@ -80,11 +103,11 @@ function calculateWinner(square){
         [1,4,7],
         [2,5,8],
         [0,4,8],
-        [2,5,6]
+        [2,4,6]
     ];
     for (let i = 0;i <lines.length;i++) {
         const [a,b,c] = lines[i];
-        if( squares[a] && squares[a] === squares[b] && square[a] === squares[c]) {
+        if( squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
             return squares[a];
         }
         
